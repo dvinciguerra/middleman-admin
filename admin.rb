@@ -72,6 +72,28 @@ get '/articles' do
   erb :articles
 end
 
+post '/articles' do
+  filename = "#{BLOG_DIR}/#{Time.now.strftime('%Y-%m-%d')}-#{params[:title].downcase.gsub(' ', '-')}.html.markdown"
+
+  File.write(filename, <<~MD, newline: :universal)
+    ---
+    title: #{params[:title]}
+    published: #{params[:published] || 'false'}
+    category: #{params[:category]}
+    tags: #{params[:tags]}
+    ---
+
+    #{params[:content]}
+  MD
+
+    redirect "/articles/#{Digest::MD5.hexdigest(File.basename(filename))}"
+end
+
+
+get '/articles/new' do
+  erb :new_article
+end
+
 get '/articles/:id' do
   @article = list_articles.find { |article| article[:id] == params[:id] }
 
@@ -416,6 +438,69 @@ __END__
     <form action="/articles/<%= @article[:id] %>/edit" method="POST">
       <div class="mb-3">
         <textarea class="form-control" id="content" name="content" rows="20"><%= @article_content %></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="/articles" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+<script>
+  var simplemde = new SimpleMDE({ element: document.getElementById("content") });
+</script>
+
+@@new_article
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <!-- Page pre-title -->
+      <div class="page-pretitle">
+        Creating a New
+      </div>
+      <h2 class="page-title">
+        Article
+      </h2>
+    </div>
+    <!-- Page title actions -->
+    <div class="col-auto ms-auto d-print-none">
+      <div class="btn-list">
+        <span class="d-none d-sm-inline">
+          <a href="/articles" class="btn">
+            Back to List
+          </a>
+        </span>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">File Content: <code></code></h3>
+  </div>
+  <div class="card-body">
+    <form action="/articles" method="POST">
+      <div class="mb-3">
+        <label for="title" class="form-label mb-1">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="">
+      </div>
+      <div class="mb-3">
+        <label for="category" class="form-label mb-1">Category</label>
+        <input type="text" class="form-control" id="category" name="category" value="">
+      </div>
+      <div class="mb-3">
+        <label for="tags" class="form-label mb-1">Tags</label>
+        <input type="text" class="form-control" id="tags" name="tags" value="">
+      </div>
+      <div class="mb-3">
+        <label for="published" class="form-label mb-1">Published</label>
+        <input type="checkbox" class="form-check-input" id="published" name="published" value="true" >
+      </div>
+      <div class="mb-3">
+        <textarea class="form-control" id="content" name="content" rows="20"></textarea>
       </div>
       <button type="submit" class="btn btn-primary">Save Changes</button>
       <a href="/articles" class="btn btn-secondary">Cancel</a>
