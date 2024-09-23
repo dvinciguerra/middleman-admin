@@ -13,6 +13,16 @@ Admin](https://github.com/jekyll/jekyll-admin).
 
 For now, you need to copy the `admin.rb` file to your Middleman project's root directory.
 
+
+## Screenshots
+
+![Middleman Admin](./screenshot2.png)
+_See and update editable assets like css, js and other files_
+
+![Middleman Admin](./screenshot4.png)
+_Edit your articles using a visual editor_
+
+
 ## Author
 
 [Daniel Vinciguerra](https://github.com./dvinciguerra)
