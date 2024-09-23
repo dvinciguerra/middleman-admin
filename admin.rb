@@ -17,6 +17,8 @@ TABLER_CSS = 'https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/ta
 TABLER_JS = 'https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js'
 
 # Caminho onde estão os artigos
+ROOT_DIR = './'
+DATA_DIR = './data'
 BLOG_DIR = './source/posts'
 
 configure :development do
@@ -57,6 +59,54 @@ helpers do
         pp articles
 
         $state[:articles] = articles
+      end
+  end
+
+  def statics_meta
+    {
+      image: { name: 'Images', type: :image, pattern: /\.(jpg|png|gif|ico|webp)$/, mode: :read_only },
+      stylesheet: { name: 'Stylesheets', type: :stylesheet, pattern: /\.(css|scss|sass|less)$/, mode: :read_write },
+      javascript: { name: 'Javascripts', type: :javascript, pattern: /\.(js|ts|coffee)$/, mode: :read_write },
+      audio: { name: 'Audios', type: :audio, pattern: /\.(mp3|ogg|wav)$/, mode: :read_only },
+      video: { name: 'Videos', type: :video, pattern: /\.(webm|mp4|avi)$/, mode: :read_only },
+      font: { name: 'Fonts', type: :font, pattern: /\.(woff|woff2|ttf|otf)$/, mode: :read_only },
+      unknow: { name: 'Unknow', type: :unknow, pattern: /$/, mode: :read_only }
+    }
+  end
+
+  def statics
+    $state[:statics] ||=
+      begin
+        type_by_extension_of = lambda { |filename|
+          case filename
+          when statics_meta.dig(:image, :pattern) then statics_meta.dig(:image, :type)
+          when statics_meta.dig(:stylesheet, :pattern) then statics_meta.dig(:stylesheet, :type)
+          when statics_meta.dig(:javascript, :pattern) then statics_meta.dig(:javascript, :type)
+          when statics_meta.dig(:audio, :pattern) then statics_meta.dig(:audio, :type)
+          when statics_meta.dig(:video, :pattern) then statics_meta.dig(:video, :type)
+          when statics_meta.dig(:font, :pattern) then statics_meta.dig(:font, :type)
+          else statics_meta.dig(:unknow, :type)
+          end
+        }
+
+        statics =
+          Dir.glob("#{ROOT_DIR}/source/{stylesheets,javascripts,images}/**/*.{jpg,png,gif,ico,webp,css,scss,sass,less,mp3,avi,mp4,ogg,webm}").map do |file|
+            filename = File.basename(file)
+            file_type = type_by_extension_of.call(filename)
+
+            {
+              id: Digest::MD5.hexdigest(file),
+              filename: filename,
+              type: file_type,
+              mode: statics_meta.dig(file_type, :mode),
+              path: Pathname.new(file).realpath.to_s,
+              created_at: File.ctime(file)
+            }
+          end
+
+        pp statics
+
+        $state[:statics] = statics
       end
   end
 end
