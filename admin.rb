@@ -280,29 +280,68 @@ __END__
       </div>
       <div class="collapse navbar-collapse" id="sidebar-menu">
         <ul class="navbar-nav pt-lg-3">
-          <li class="nav-item">
-            <a class="nav-link" href="/articles" >
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#navbar-blogs" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
               <span class="nav-link-icon d-md-none d-lg-inline-block">
                 <i class="ti ti-article ti-md"></i>
               </span>
-              <span class="nav-link-title">Articles</span>
+              <span class="nav-link-title">Blog</span>
             </a>
+            <div class="dropdown-menu hide" data-bs-popper="static">
+              <a class="dropdown-item" href="/articles">
+                Published
+              </a>
+              <a class="dropdown-item" href="/articles?state=draft">
+                Drafts
+              </a>
+            </div>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/articles?state=draft" >
-              <span class="nav-link-icon d-md-none d-lg-inline-block">
-                <i class="ti ti-notes-off ti-md"></i>
-              </span>
-              <span class="nav-link-title">Drafts</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/pages" >
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#navbar-pages" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
               <span class="nav-link-icon d-md-none d-lg-inline-block">
                 <i class="ti ti-app-window ti-md"></i>
               </span>
               <span class="nav-link-title">Pages</span>
             </a>
+            <div class="dropdown-menu hide" data-bs-popper="static">
+              <a class="dropdown-item" href="/pages">
+                Page Files
+              </a>
+              <a class="dropdown-item" href="/pages?type=partials">
+                Partials
+              </a>
+              <a class="dropdown-item" href="/pages?type=layouts">
+                Layouts
+              </a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#navbar-statics" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+              <span class="nav-link-icon d-md-none d-lg-inline-block">
+                <i class="ti ti-photo ti-md"></i>
+              </span>
+              <span class="nav-link-title">Static Files</span>
+            </a>
+            <div class="dropdown-menu hide" data-bs-popper="static">
+              <a class="dropdown-item" href="/statics?type=stylesheet">
+                Stylesheets
+              </a>
+              <a class="dropdown-item" href="/statics?type=javascript">
+                Javascripts
+              </a>
+              <a class="dropdown-item" href="/statics?type=image">
+                Images
+              </a>
+              <a class="dropdown-item" href="/statics?type=audio">
+                Audios
+              </a>
+              <a class="dropdown-item" href="/statics?type=videos">
+                Videos
+              </a>
+              <a class="dropdown-item" href="/statics?type=fonts">
+                Fonts
+              </a>
+            </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/datas" >
@@ -310,14 +349,6 @@ __END__
                 <i class="ti ti-file-database ti-md"></i>
               </span>
               <span class="nav-link-title">Datas</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/datas" >
-              <span class="nav-link-icon d-md-none d-lg-inline-block">
-                <i class="ti ti-photo ti-md"></i>
-              </span>
-              <span class="nav-link-title">Static Files</span>
             </a>
           </li>
           <li class="nav-item">
