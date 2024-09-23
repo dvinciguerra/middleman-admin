@@ -706,7 +706,7 @@ __END__
 
 <div class="card">
   <div class="card-header">
-    <h3 class="card-title">File Content: <code></code></h3>
+    <h3 class="card-title">New Article</h3>
   </div>
   <div class="card-body">
     <form action="/articles" method="POST">
@@ -727,6 +727,7 @@ __END__
         <input type="checkbox" class="form-check-input" id="published" name="published" value="true" >
       </div>
       <div class="mb-3">
+        <label for="content" class="form-label mb-1">Article Content</label>
         <textarea class="form-control" id="content" name="content" rows="20"></textarea>
       </div>
       <button type="submit" class="btn btn-primary">Save Changes</button>
