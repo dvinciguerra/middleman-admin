@@ -62,6 +62,24 @@ helpers do
       end
   end
 
+  def datas
+    $state[:datas] ||=
+      begin
+        datas =
+          Dir.glob("#{DATA_DIR}/*.{yml,yaml,json}").map do |file|
+            File.basename(file)
+
+            {
+              id: Digest::MD5.hexdigest(File.basename(file)),
+              filename: File.basename(file),
+              path: Pathname.new(file).realpath.to_s
+            }
+          end
+
+        $state[:datas] = datas
+      end
+  end
+
   def statics_meta
     {
       image: { name: 'Images', type: :image, pattern: /\.(jpg|png|gif|ico|webp)$/, mode: :read_only },
