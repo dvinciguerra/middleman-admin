@@ -31,7 +31,7 @@ end
 $state = {}
 
 helpers do
-  def list_articles
+  def articles
     $state[:articles] ||=
       begin
         articles =
@@ -139,7 +139,7 @@ get '/statics/:id' do
 end
 
 get '/articles' do
-  @articles = list_articles
+  @articles = articles
   @articles = @articles.filter { |article| article[:published] == (params[:state] != 'draft') }
 
   erb :articles
@@ -167,7 +167,7 @@ get '/articles/new' do
 end
 
 get '/articles/:id' do
-  @article = list_articles.find { |article| article[:id] == params[:id] }
+  @article = articles.find { |article| article[:id] == params[:id] }
 
   filepath = @article[:path]
 
@@ -181,7 +181,7 @@ get '/articles/:id' do
 end
 
 get '/articles/:id/edit' do
-  @article = list_articles.find { |article| article[:id] == params[:id] }
+  @article = articles.find { |article| article[:id] == params[:id] }
   filepath = @article[:path]
 
   if File.exist?(filepath)
@@ -195,7 +195,7 @@ end
 
 # Salvar alterações no artigo
 post '/articles/:id/edit' do
-  @article = list_articles.find { |article| article[:id] == params[:id] }
+  @article = articles.find { |article| article[:id] == params[:id] }
   filepath = @article[:path]
 
   if File.exist?(filepath)
