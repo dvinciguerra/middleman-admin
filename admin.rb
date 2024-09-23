@@ -115,6 +115,29 @@ get '/' do
   redirect 'articles'
 end
 
+get '/statics' do
+  params[:type] ||= :stylesheet
+
+  @statics = statics
+  @statics = @statics.filter { |file| file[:type] == params[:type].to_sym }
+
+  erb :statics
+end
+
+get '/statics/:id' do
+  @static = statics.find { |static| static[:id] == params[:id] }
+
+  filepath = @static[:path]
+
+  if File.exist?(filepath)
+    @static_content = File.read(filepath)
+    erb :view_static
+  else
+    status 404
+    'Static file not found!'
+  end
+end
+
 get '/articles' do
   @articles = list_articles
   @articles = @articles.filter { |article| article[:published] == (params[:state] != 'draft') }
