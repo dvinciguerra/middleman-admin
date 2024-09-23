@@ -159,9 +159,8 @@ post '/articles' do
     #{params[:content]}
   MD
 
-    redirect "/articles/#{Digest::MD5.hexdigest(File.basename(filename))}"
+  redirect "/articles/#{Digest::MD5.hexdigest(File.basename(filename))}"
 end
-
 
 get '/articles/new' do
   erb :new_article
