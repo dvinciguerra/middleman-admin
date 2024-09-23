@@ -349,6 +349,134 @@ __END__
 </body>
 </html>
 
+@@statics
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <div class="page-pretitle">
+        List of all
+      </div>
+      <h2 class="page-title">
+        Static Files
+      </h2>
+    </div>
+
+    <div class="col-auto ms-auto d-print-none">
+      <div class="btn-list">
+      <% if statics_meta.dig(params[:type].to_sym, :mode) == :read_only %>
+          <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+            Upload Static File
+          </a>
+        <% else %>
+          <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+            Add Static File
+          </a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Static Files</h3>
+  </div>
+  <div class="card-body">
+
+    <% if @statics.count > 0 %>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Filename</th>
+            <th>Type</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @statics.each do |static| %>
+            <tr>
+              <td><a href="/statics/<%= static[:id]%>" title="<%= static[:filename] %>"><%= static[:filename] %></a></td>
+              <td> <span class="badge badge-sm text-light bg-primary"><%= static[:type] %></span </td>
+              <td><%= static[:created_at].strftime("%Y-%m-%d %H:%M") %></td>
+              <td>
+                <a href="/statics/<%= static[:id] %>/edit" class="btn btn-sm btn-secondary">Edit</a>
+                <a href="/statics/<%= static[:id] %>/delete" class="btn btn-sm btn-danger">Edit</a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="empty">
+        <p class="empty-title h3 text-info">No static files found</p>
+        <p class="empty-subtitle text-muted">
+          Static files are files that are not processed by Middleman.
+        </p>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+@@view_static
+<% content_for :page_header do %>
+  <div class="row g-2 align-items-center">
+    <div class="col">
+      <!-- Page pre-title -->
+      <div class="page-pretitle">
+        View Article
+      </div>
+      <h2 class="page-title">
+      Static File "<%= @static[:filename] %>"
+      </h2>
+    </div>
+    <!-- Page title actions -->
+    <div class="col-auto ms-auto d-print-none">
+      <div class="btn-list">
+        <span class="d-none d-sm-inline">
+          <a href="/statics" class="btn">
+            Back to List
+          </a>
+        </span>
+        <% if @static[:mode] == :read_write %>
+          <a href="/statics/<%= @static[:id] %>/edit" class="btn btn-primary d-none d-sm-inline-block">
+            <i class="ti ti-pencil"></i>
+            Edit Static File
+          </a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">File Content</h3>
+  </div>
+  <div class="card-body">
+    <% if @static[:mode] == :read_write %>
+      <pre><%= @static_content %></pre>
+    <% elsif @static[:type] == :image %>
+      <img src="<%= @static[:path] %>" class="card-img-top" alt="<%= @static[:filename] %>" />
+    <% elsif @static[:type] == :audio %>
+      <audio controls>
+        <source src="<%= @static[:path] %>" />
+        Your browser does not support the audio element.
+      </audio>
+    <% elsif @static[:type] == 'video' %>
+      <video controls>
+        <source src="<%= @static[:path] %>" />
+      </video>
+    <% end %>
+    <p>
+      <a href="/statics" class="btn btn-primary">Back to List</a>
+    </p>
+  </div>
+</div>
+
+
 @@articles
 <% content_for :page_header do %>
   <div class="row g-2 align-items-center">
